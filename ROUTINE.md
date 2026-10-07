@@ -18,6 +18,9 @@ any temporary files. Never print, log or echo the value of DEVTO_API_KEY.
   `api-key: $DEVTO_API_KEY` and `Accept: application/vnd.forem.api-v1+json`.
 - Among the returned articles, keep those whose title starts with `Dev News Digest`.
   The cutoff is the newest `published_at` among them.
+- Fetch that newest digest with `GET https://dev.to/api/articles/<id>` and keep its
+  `body_markdown`. Do not repeat a story it already covered unless there is real news
+  about it.
 - If there is no earlier digest, use now minus 6 hours. If the cutoff is more than 24
   hours ago, use now minus 24 hours.
 
@@ -27,7 +30,9 @@ Fetch each feed with curl (`-L --max-time 20`, user agent `Mozilla/5.0 (news-dig
 and parse it with Python's standard library (RSS `<item>` and Atom `<entry>`). Keep only
 items published after the cutoff. If a feed fails, skip it and note it; do not stop.
 
-- Hacker News: https://hnrss.org/frontpage
+- Hacker News: https://hnrss.org/frontpage (if it fails, use https://news.ycombinator.com/rss
+  instead; that feed has no dates, so treat its items as new and rely on the selection
+  step to skip stories already covered in the previous digest)
 - Lobsters: https://lobste.rs/rss
 - GitHub Blog: https://github.blog/feed/
 - InfoQ: https://feed.infoq.com/
@@ -76,8 +81,8 @@ minutes. Use the most specific URL available for each item.
 
 ## 4. Publish
 
-- Title: `Dev News Digest: <D Mon YYYY>, <HH:00>` using Europe/Stockholm time of the
-  scheduled run (06:00, 12:00 or 18:00; round to the nearest of these).
+- Title: `Dev News Digest: <D Mon YYYY>, <HH:00>` using the current Europe/Stockholm
+  time rounded to the nearest hour (for example `Dev News Digest: 7 Oct 2026, 12:00`).
 - Build the JSON body with Python's `json` module (never by string concatenation):
   `{"article": {"title": ..., "body_markdown": ..., "published": true, "tags": ["news", "programming", "webdev", "ai"]}}`
 - `POST https://dev.to/api/articles` with headers `api-key`, `Content-Type: application/json`
