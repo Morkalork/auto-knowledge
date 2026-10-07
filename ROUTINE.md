@@ -12,6 +12,10 @@ autonomously; nobody is watching this session. Do not create, change or commit f
 any repository, and do not open pull requests. Use a scratch directory under /tmp for
 any temporary files. Never print, log or echo the value of DEVTO_API_KEY.
 
+Every request to dev.to must send the header `User-Agent: Mozilla/5.0 (news-digest bot)`.
+dev.to answers HTTP 403 with an empty body to Python's default user agent, so use curl
+with `-A "Mozilla/5.0 (news-digest bot)"` for all dev.to calls.
+
 ## 1. Find the cutoff time
 
 - Call `GET https://dev.to/api/articles/me/published?per_page=30` with the headers
@@ -83,10 +87,12 @@ minutes. Use the most specific URL available for each item.
 
 - Title: `Dev News Digest: <D Mon YYYY>, <HH:00>` using the current Europe/Stockholm
   time rounded to the nearest hour (for example `Dev News Digest: 7 Oct 2026, 12:00`).
-- Build the JSON body with Python's `json` module (never by string concatenation):
+- Build the JSON body with Python's `json` module (never by string concatenation) and
+  write it to a file:
   `{"article": {"title": ..., "body_markdown": ..., "published": true, "tags": ["news", "programming", "webdev", "ai"]}}`
-- `POST https://dev.to/api/articles` with headers `api-key`, `Content-Type: application/json`
-  and `Accept: application/vnd.forem.api-v1+json`.
+- `POST https://dev.to/api/articles` with curl (`-A "Mozilla/5.0 (news-digest bot)"`,
+  `--data @<file>`) and the headers `api-key`, `Content-Type: application/json` and
+  `Accept: application/vnd.forem.api-v1+json`.
 - On HTTP 429, wait 30 seconds and retry once. Any other non-2xx response is a failure;
   do not retry.
 
