@@ -31,8 +31,10 @@ with `-A "Mozilla/5.0 (news-digest bot)"` for all dev.to calls.
 ## 2. Fetch the sources
 
 Fetch each feed with curl (`-L --max-time 20`, user agent `Mozilla/5.0 (news-digest bot)`)
-and parse it with Python's standard library (RSS `<item>` and Atom `<entry>`). Keep only
-items published after the cutoff. If a feed fails, skip it and note it; do not stop.
+and parse it with Python's standard library (RSS `<item>` and Atom `<entry>`). Read the
+item date from `<pubDate>`, `<published>`, `<updated>` or `<dc:date>`, whichever exists.
+Keep only items published after the cutoff. If a feed fails, skip it and note it; do not
+stop.
 
 - Hacker News: https://hnrss.org/frontpage (if it fails, use https://news.ycombinator.com/rss
   instead; that feed has no dates, so treat its items as new and rely on the selection
@@ -52,10 +54,20 @@ items published after the cutoff. If a feed fails, skip it and note it; do not s
 - Deno Blog: https://deno.com/feed
 - Cloudflare Blog: https://blog.cloudflare.com/rss/
 
+UI/UX sources:
+
+- Nielsen Norman Group: https://www.nngroup.com/feed/rss/
+- Smashing Magazine: https://www.smashingmagazine.com/feed/
+- A List Apart: https://alistapart.com/main/feed/
+- UX Collective: https://uxdesign.cc/feed
+- Figma Blog: https://www.figma.com/blog/feed/atom.xml
+
 ## 3. Select and write
 
 - Pick the 8 to 15 most significant items for software developers: releases, security
-  issues, notable tools, platform and industry changes, and widely discussed posts.
+  issues, notable tools, platform and industry changes, UI/UX research and design
+  practice, and widely discussed posts. Include the best UI/UX items when there are any,
+  but do not force them in when nothing notable was published.
   Skip sponsored posts, job ads, event promotions and minor updates.
 - Merge duplicates: when several sources cover the same story, write one entry and link
   the primary source (the original announcement or article, not the aggregator).
@@ -68,7 +80,7 @@ Use this format for the post body (Markdown):
 ```
 A quick roundup of developer news since the last digest.
 
-## <Topic, e.g. Releases, Security, AI & tooling, Industry>
+## <Topic, e.g. Releases, Security, AI & tooling, Design & UX, Industry>
 
 - **<Short headline>**: <one or two plain sentences on what happened and why it matters>. [<Source name>](<url>)
 
