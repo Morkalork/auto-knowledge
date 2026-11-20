@@ -6,7 +6,7 @@ itself; keep this file in sync when the prompt changes.
 
 ---
 
-You are running the scheduled "Dev News Digest" job. Your job is to summarize developer
+You are running the scheduled "Dev News Digest" job. Your job is to summarize AI, developer
 and software news published since the previous digest and publish it to dev.to. Work
 autonomously; nobody is watching this session. Do not create, change or commit files in
 any repository, and do not open pull requests. Use a scratch directory under /tmp for
@@ -54,6 +54,24 @@ stop.
 - Deno Blog: https://deno.com/feed
 - Cloudflare Blog: https://blog.cloudflare.com/rss/
 
+AI sources:
+
+- OpenAI News: https://openai.com/news/rss.xml
+- Anthropic News: https://www.anthropic.com/news (no feed; fetch the page and take the
+  articles under `/news/` whose date on the page is after the cutoff, then fetch each
+  article page for its content)
+- Google DeepMind Blog: https://deepmind.google/blog/rss.xml
+- Google Research Blog: https://research.google/blog/rss/
+- Hugging Face Blog: https://huggingface.co/blog/feed.xml
+- The Verge AI: https://www.theverge.com/rss/ai-artificial-intelligence/index.xml
+- MIT Technology Review AI: https://www.technologyreview.com/topic/artificial-intelligence/feed
+- The Decoder: https://the-decoder.com/feed/
+- Latent Space: https://www.latent.space/feed
+- Import AI: https://importai.substack.com/feed
+- Interconnects: https://www.interconnects.ai/feed
+- Ahead of AI: https://magazine.sebastianraschka.com/feed
+- One Useful Thing: https://www.oneusefulthing.org/feed
+
 UI/UX sources:
 
 - Nielsen Norman Group: https://www.nngroup.com/feed/rss/
@@ -64,11 +82,18 @@ UI/UX sources:
 
 ## 3. Select and write
 
-- Pick the 8 to 15 most significant items for software developers: releases, security
-  issues, notable tools, platform and industry changes, UI/UX research and design
-  practice, and widely discussed posts. Include the best UI/UX items when there are any,
-  but do not force them in when nothing notable was published.
-  Skip sponsored posts, job ads, event promotions and minor updates.
+- Pick the 8 to 15 most significant items for software developers.
+- About 70% of the items must be about AI: model and product releases, research,
+  AI developer tools and agents, APIs and pricing, safety and policy, and AI industry
+  news. Count an item as AI when AI is its main subject, whichever source it came from.
+  For example, 7 AI items and 3 others in a 10-item post.
+- Fill the remaining 30% with the most important other developer news: releases,
+  security issues, notable tools, platform and industry changes, and UI/UX research and
+  design practice. Include the best UI/UX items when there are any, but do not force
+  them in when nothing notable was published.
+- If there is not enough notable AI news to reach 70%, do not pad with minor AI items;
+  accept a lower AI share for that post instead.
+- Skip sponsored posts, job ads, event promotions and minor updates.
 - Merge duplicates: when several sources cover the same story, write one entry and link
   the primary source (the original announcement or article, not the aggregator).
 - If fewer than 3 items are worth reporting, do not publish. End the run as described
@@ -78,9 +103,9 @@ UI/UX sources:
 Use this format for the post body (Markdown):
 
 ```
-A quick roundup of developer news since the last digest.
+A quick roundup of AI and developer news since the last digest.
 
-## <Topic, e.g. Releases, Security, AI & tooling, Design & UX, Industry>
+## <Topic, e.g. AI models & research, AI tools & agents, AI industry & policy, Releases, Security, Design & UX>
 
 - **<Short headline>**: <one or two plain sentences on what happened and why it matters>. [<Source name>](<url>)
 
@@ -92,7 +117,7 @@ A quick roundup of developer news since the last digest.
 item links to its original source; check the source before relying on any detail.*
 ```
 
-Group entries under 2 to 5 topic headings. Keep the whole post readable in about two
+Group entries under 2 to 5 topic headings, with the AI headings first. Keep the whole post readable in about two
 minutes. Use the most specific URL available for each item.
 
 ## 4. Publish
